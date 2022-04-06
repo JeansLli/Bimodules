@@ -3,9 +3,10 @@ scc2020
 #Number of parameters
 2
 #Sizes of generating sets
-1 2
+1 3
 #First block
 2 2 ; 1 2 
 #Second block
 1 0 
-0 1 
+0 1
+0 3
