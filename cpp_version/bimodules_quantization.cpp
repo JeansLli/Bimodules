@@ -247,6 +247,7 @@ int main(int argc, char* const argv[]) {
             char drop;
             int face1,face2,face3,face4;
             simplex_node simplex;
+            
             if(i==3){ // 0-dim
                 ss>>grid_x>>grid_y;
                 simplex.face={vertice_id};
@@ -261,6 +262,7 @@ int main(int argc, char* const argv[]) {
                 ss>>grid_x>>grid_y>>drop>>face1>>face2>>face3>>face4;
                 simplex.face = {face1,face2,face3,face4};
             }
+
             simplex.grid_x = grid_x;
             simplex.grid_y = grid_y;
             x_values.push_back(grid_x);
@@ -480,15 +482,16 @@ int main(int argc, char* const argv[]) {
 
     //print barcodes
     //std::cout << "Computed barcode: " << std::endl << b << std::endl;
+    cout<<"with st.initialize_filtration()"<<endl;
     std::cout << "Barcode size: " << b.size() << std::endl;
 
     std::map<bar, int>::iterator it;
-    std::ofstream f("../result/barcode.txt");
+    //std::ofstream f("../result/barcode.txt");
     for(it=b.begin(); it != b.end(); it++)
     {
-        f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  std::endl;
+        //f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  std::endl;
         //cout << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  std::endl;
-
+        cout<<"m[("<<(it->first).first.first<<","<<(it->first).first.second <<"),("<<(it->first).second.first<<","<<(it->first).second.second<<")]="<<it->second<<endl;
     }
 
 
