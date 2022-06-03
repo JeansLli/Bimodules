@@ -33,6 +33,7 @@ using std::string;
 using std::ifstream; 
 using std::vector;
 
+
 struct simplex_node{
 	float grid_x;
 	float grid_y;
@@ -140,11 +141,11 @@ void compute_R_S_incl_excl(rank& r, barcode& b) {
 
 void zero_rank (rank& r, int n, int m) {  // n columns, m rows in the grid (column-dominant)
     r.resize(n);
-    for (std::vector<std::vector<std::vector<int> > >& u: r){
+    for (vector<vector<vector<int> > >& u: r){
         u.resize(m);
-        for (std::vector<std::vector<int> >& v: u){
+        for (vector<vector<int> >& v: u){
             v.resize(n);
-            for (std::vector<int>& w: v) {
+            for (vector<int>& w: v) {
                 w.resize(m);
                 w.assign(m, 0);
             }
@@ -183,7 +184,6 @@ int main(int argc, char* const argv[]) {
 	
     int line_i = 1;
     int vertice_id = 0;
-    int dF2, dF1, dF0, dummy; 
     vector<int> rank_num;
     vector<float> x_values;
     vector<float> y_values;
@@ -212,18 +212,19 @@ int main(int argc, char* const argv[]) {
     //read the file
     while (getline(input_file, line)){
         if(line[0]!='#'){
+
         	if(line_i<2){
         		line_i+=1;
         		continue;
         	}
         	else if(line_i==2){
+                //
                 std::stringstream ss(line);
-                ss >> dF2 >> dF1 >> dF0 >> dummy; 
-                rank_num.push_back(dF2);
-                rank_num.push_back(dF1);
-                rank_num.push_back(dF0);
-                rank_num.push_back(dummy);
-        		
+                int out;
+                while(ss>>out){
+                    rank_num.push_back(out);
+                }
+                rank_num.pop_back();
     			line_i += 1;
     		}else{
     			block_lines.push_back(line);
@@ -244,25 +245,29 @@ int main(int argc, char* const argv[]) {
             //cout<<"block_lines[j]="<<block_lines[j]<<endl;
             std::stringstream ss(block_lines[j]);
             float grid_x, grid_y;
-            char drop;
             int face1,face2,face3,face4;
             simplex_node simplex;
-            
-            if(i==3){ // 0-dim
-                ss>>grid_x>>grid_y;
+            int count=0;
+            string out;
+            while(ss>>out){
+                if(count==0){
+                    grid_x = std::stof(out);
+                    ++count;
+                }else if(count==1){
+                    grid_y = std::stof(out);
+                    ++count;
+                }else if(count==2){
+                    ++count;
+                    continue;
+                }else{
+                    simplex.face.push_back(std::stoi(out));
+                }
+            }
+            if(simplex.face.size()==0){
                 simplex.face={vertice_id};
                 vertice_id += 1;
-            }else if(i==2){// 1-dim
-                ss>>grid_x>>grid_y>>drop>>face1>>face2;
-                simplex.face = {face1,face2};
-            }else if(i==1){// 2-dim
-                ss>>grid_x>>grid_y>>drop>>face1>>face2>>face3;
-                simplex.face = {face1,face2,face3};
-            }else if(i==0){// 3-dim
-                ss>>grid_x>>grid_y>>drop>>face1>>face2>>face3>>face4;
-                simplex.face = {face1,face2,face3,face4};
             }
-
+            
             simplex.grid_x = grid_x;
             simplex.grid_y = grid_y;
             x_values.push_back(grid_x);
@@ -276,7 +281,7 @@ int main(int argc, char* const argv[]) {
 
     
     //////////////////Convert the face number to vertex number
-    start_id = rank_num[2] + rank_num[3];
+    start_id = rank_num[rank_num.size()-1] + rank_num[rank_num.size()-2];
     int start_id_last;
     for(int i=rank_num.size()-3; i>=0; --i){
     	start_id_last = start_id - rank_num[i+1];
@@ -335,7 +340,7 @@ int main(int argc, char* const argv[]) {
 
     }
     //////////////////
-    //std::cout << "The complex contains " << st.num_simplices() << " simplices - " << st.num_vertices() << " vertices "<< std::endl;
+    //cout << "The complex contains " << st.num_simplices() << " simplices - " << st.num_vertices() << " vertices "<< endl;
     
 
     // Build the map from Simplex handle to grid node coordinates(x,y)
@@ -387,11 +392,11 @@ int main(int argc, char* const argv[]) {
             /*
             //print the filtration
             for (auto f_simplex : st.filtration_simplex_range()) {
-                std::cout << "   " << "[" << st.filtration(f_simplex) << "] ";
+                cout << "   " << "[" << st.filtration(f_simplex) << "] ";
                 for (auto vertex : st.simplex_vertex_range(f_simplex)) {
-                    std::cout << static_cast<int>(vertex) << " -- ";
+                    cout << static_cast<int>(vertex) << " -- ";
                 }
-                std::cout << ";" << std::endl;
+                cout << ";" << endl;
             
             }*/
             
@@ -481,18 +486,22 @@ int main(int argc, char* const argv[]) {
     }*/
 
     //print barcodes
-    //std::cout << "Computed barcode: " << std::endl << b << std::endl;
     cout<<"with st.initialize_filtration()"<<endl;
-    std::cout << "Barcode size: " << b.size() << std::endl;
+    cout << "Barcode size: " << b.size() << std::endl;
 
     std::map<bar, int>::iterator it;
-    //std::ofstream f("../result/barcode.txt");
+    string out_file = "../result/dim_"+std::to_string(rank_dim)+"_barcodes_"+std::to_string(st.num_simplices())+".txt";
+    std::ofstream f(out_file);
+
+    f << x_range << " "<< y_range<<endl;
+
+
     for(it=b.begin(); it != b.end(); it++)
     {
-        //f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  std::endl;
-        //cout << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  std::endl;
-        cout<<"m[("<<(it->first).first.first<<","<<(it->first).first.second <<"),("<<(it->first).second.first<<","<<(it->first).second.second<<")]="<<it->second<<endl;
+        f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  endl;
+        //cout<<"m[("<<(it->first).first.first<<","<<(it->first).first.second <<"),("<<(it->first).second.first<<","<<(it->first).second.second<<")]="<<it->second<<endl;
     }
+
 
 
     cout <<"time of updating a simplex tree per path is "<< time_update_simplex_tree/((x_range+1)*(y_range+1)) <<"s"<<endl;
@@ -502,6 +511,7 @@ int main(int argc, char* const argv[]) {
     cout << "total time is "<<time_total<<"s"<<endl;
     cout << "average running time per path is "<<time_total/((x_range+1)*(y_range+1)) <<"s"<<endl;
 
+    cout << "output barcodes file: "<< out_file<<endl;
 
 }
 
