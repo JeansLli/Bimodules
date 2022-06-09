@@ -44,6 +44,70 @@ def visualize_barcodes(m):
     plt.show()
     #ax.axis('off')
 
+
+def visualize_barcodes_lines_intensity(m):
+    x_range = m.shape[0]-1
+    y_range = m.shape[1]-1
+
+    data = np.ones((x_range,y_range)) * np.nan
+
+    fig, ax = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
+    for x in range(x_range+2):
+        ax.axvline(x, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) # Horizontal
+
+    for y in range(y_range+2):
+        ax.axhline(y, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) #) # Ordinate
+
+    for i in range(m.shape[0]):
+        for j in range(m.shape[1]):
+            for k in range(i,m.shape[0]):
+                for l in range(j,m.shape[1]):
+                    if(m[i,j,k,l]):
+                        print("m(({0},{1}),({2},{3}))={4}".format(i,j,k,l,int(m[i,j,k,l])))
+                    if(m[i,j,k,l]>0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value)
+                    if(m[i,j,k,l]<0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value)
+
+    #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    plt.show()
+    #ax.axis('off')
+
+def visualize_barcodes_points_intensity(m):
+    x_range = m.shape[0]-1
+    y_range = m.shape[1]-1
+
+    data = np.ones((x_range,y_range)) * np.nan
+
+    fig, ax = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
+    for x in range(-x_range-2,x_range+2):
+        ax.axvline(x, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) # Horizontal
+    ax.axvline(0, lw=1, color='k', zorder=5,linestyle="-") # Horizontal
+
+    for y in range(-y_range-2,y_range+2):
+        ax.axhline(y, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) #) # Ordinate
+    ax.axhline(0, lw=1, color='k', zorder=5,linestyle="-") # Horizontal
+
+    for i in range(m.shape[0]):
+        for j in range(m.shape[1]):
+            for k in range(i,m.shape[0]):
+                for l in range(j,m.shape[1]):
+                    if(m[i,j,k,l]):
+                        print("m(({0},{1}),({2},{3}))={4}".format(i,j,k,l,int(m[i,j,k,l])))
+                    if(m[i,j,k,l]>0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        ax.plot([k-i], [l-j],'bo', linestyle="-",alpha=min_value)
+                    if(m[i,j,k,l]<0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        ax.plot([i-k], [j-l], 'ro', linestyle="-",alpha=min_value)
+
+    #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    plt.show()
+    #ax.axis('off')
+
+
 parser = argparse.ArgumentParser(description='test')
 parser.add_argument('--input', type=str, help='input barcodes file')
 
@@ -71,7 +135,8 @@ while(line!=''):
 
 f.close()
 
-visualize_barcodes(m)
+visualize_barcodes_lines_intensity(m)
+visualize_barcodes_points_intensity(m)
 
 
 

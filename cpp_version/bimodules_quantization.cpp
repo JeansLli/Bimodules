@@ -1,16 +1,14 @@
 #include <gudhi/graph_simplicial_complex.h>
 #include <gudhi/Simplex_tree.h>
 #include <gudhi/Persistent_cohomology.h>
- 
 #include <iostream>
-#include <utility>  // for pair
+#include <utility> 
 #include <vector>
 #include <fstream>
 #include <string>
 #include <sstream>
 #include <ctime>
 
- 
 using Simplex_tree = Gudhi::Simplex_tree<>;
 using Vertex_handle = Simplex_tree::Vertex_handle;
 using Simplex_handle =  Simplex_tree::Simplex_handle;
@@ -32,7 +30,6 @@ using std::endl;
 using std::string;
 using std::ifstream; 
 using std::vector;
-
 
 struct simplex_node{
 	float grid_x;
@@ -77,6 +74,8 @@ vector<entry> create_stair(entry elbow, entry end_point){
 
 
 entry proj_grid_to_path(entry simplex_node, entry elbow, int x_range,int y_range){
+// input: elbow = [i,j]
+// output: stair = [0,0] ->...->[i,0] ->...->[i,j]->...->[x_range,j]->...->[x_range,y_range]
 	int x = simplex_node.first;
 	int y = simplex_node.second;
 	int x0 = elbow.first;
@@ -104,6 +103,8 @@ entry proj_grid_to_path(entry simplex_node, entry elbow, int x_range,int y_range
 
 
 int multp (rank& r, int i, int j, int k, int l) {
+// m(s,t+) = r(s,t) − r((s.x −1,s.y),t) − r((s.x,s.y −1),t) + r((s.x −1,s.y −1),t)
+    
     // check boundaries 
     if(i<0 || j<0 || k>=r.size() || l>=r[0].size())
         return 0;
@@ -122,6 +123,8 @@ int multp (rank& r, int i, int j, int k, int l) {
 
 
 void compute_R_S_incl_excl(rank& r, barcode& b) {
+// m(s,t) = m(s,t+) − m(s,(t.x +1,t.y)+) − m(s,(t.x,t.y +1)+) + m(s,(t.x +1,t.y +1)+)
+    
     for (int i = 0; i<r.size(); i++){
         for (int j = 0; j<r[0].size(); j++){
             for (int k = i; k<r.size(); k++){
@@ -158,8 +161,6 @@ int main(int argc, char* const argv[]) {
     int y_range;
     int rank_dim;
     string filename;
-    //string filename("../../../cgta_paper_2021/function_rips/function_rips_with_threshold_100_1.scc");
-    //string filename("../../data/fig3-2.txt");
 
     if(argc!=5){
         cout <<"ERROR: Please input the grid size(x_range,y_range), rank_dim and input file"<<endl;
@@ -172,7 +173,7 @@ int main(int argc, char* const argv[]) {
         filename=argv[4];
     }
 
-    //for running time
+    // Variables for running time
     double time_update_simplex_tree=0;
     double time_barcodes=0;
     double time_rank_inv=0;
@@ -181,22 +182,20 @@ int main(int argc, char* const argv[]) {
     clock_t start_time;
     clock_t end_time;
 
-	
+	// Variables for reading the file
     int line_i = 1;
+    string line;
+    vector<string> block_lines;
     int vertice_id = 0;
     vector<int> rank_num;
     vector<float> x_values;
     vector<float> y_values;
     vector<simplex_node> simplices;
     
-    Simplex_tree st;
+    Simplex_tree st; //define a simplex tree
 
     entry end_point(x_range,y_range);
-    simplex_grid_map sg_map;
-
-    //Read file
-    string line;
-    vector<string> block_lines;
+    simplex_grid_map sg_map;//a map from simplex handle to (x,y) in Grid   
 
     ifstream input_file(filename);
     if (!input_file.is_open()) {
@@ -204,7 +203,6 @@ int main(int argc, char* const argv[]) {
              << filename << "'" << endl;
         return EXIT_FAILURE;
     }
-
 
     getline(input_file, line);
     assert(line == "scc2020");
@@ -237,12 +235,9 @@ int main(int argc, char* const argv[]) {
     int start_id = 0;
     int simplices_len=block_lines.size();
     
-    /////////////////// Store the input data as simplices
+    /////////////////// Store the input data in simplices
     for(int i=rank_num.size()-1; i>=0; --i){
-    	//string simplices_i;
-    	//cout << "rank_num:" << i << endl;
     	for(int j=simplices_len-start_id-rank_num[i]; j<simplices_len-start_id; ++j){
-            //cout<<"block_lines[j]="<<block_lines[j]<<endl;
             std::stringstream ss(block_lines[j]);
             float grid_x, grid_y;
             int face1,face2,face3,face4;
@@ -280,7 +275,7 @@ int main(int argc, char* const argv[]) {
 
 
     
-    //////////////////Convert the face number to vertex number
+    //////////////////Convert the face index to vertex index
     start_id = rank_num[rank_num.size()-1] + rank_num[rank_num.size()-2];
     int start_id_last;
     for(int i=rank_num.size()-3; i>=0; --i){
@@ -313,7 +308,7 @@ int main(int argc, char* const argv[]) {
     float y_interval = (y_max-y_min)/y_range;
 
 
-    ///////////////// Convert the float grid coord to integer grid coord
+    ///////////////// Convert the float grid coord to integer grid coord and scale it according to grid size
     vector<simplex_node> simplices_integer=simplices;
     for(int i=0; i<simplices.size();++i){
     	float grid_x = simplices[i].grid_x;
@@ -339,11 +334,10 @@ int main(int argc, char* const argv[]) {
         }
 
     }
-    //////////////////
     //cout << "The complex contains " << st.num_simplices() << " simplices - " << st.num_vertices() << " vertices "<< endl;
-    
+    //////////////////
 
-    // Build the map from Simplex handle to grid node coordinates(x,y)
+    // Build the map from Simplex handle to grid node coordinates (x,y)
     int i=0;
     for (auto f_simplex : st.filtration_simplex_range()) {
         sg_map[f_simplex] = entry(simplices_integer[i].grid_x,simplices_integer[i].grid_y);
@@ -379,16 +373,19 @@ int main(int argc, char* const argv[]) {
     		vector<entry> stair = create_stair(elbow, end_point);
 
     		start_time=clock();
-            
+            ////////////////////update the filtration value of simplex in the simplex tree
             for(Simplex_handle sh: st.complex_simplex_range()){
                 entry node_grid = sg_map[sh];
                 entry proj_p = proj_grid_to_path(node_grid, elbow, x_range, y_range);
                 st.assign_filtration(sh,proj_p.first+proj_p.second);
             }
 
-            //TODO : not sure whether we should use this function
-            st.initialize_filtration();//will sort the simplex by filtration order
-            
+            st.initialize_filtration();//sort the simplex by filtration order
+            end_time = clock();
+            time_update_simplex_tree += ((double)(end_time-start_time)/CLOCKS_PER_SEC);
+            //cout << "time of updating a simplex tree "<<(double)(end_time-start_time)/CLOCKS_PER_SEC <<"s"<<endl;
+            ////////////////////
+
             /*
             //print the filtration
             for (auto f_simplex : st.filtration_simplex_range()) {
@@ -397,29 +394,25 @@ int main(int argc, char* const argv[]) {
                     cout << static_cast<int>(vertex) << " -- ";
                 }
                 cout << ";" << endl;
-            
             }*/
             
-    		end_time=clock();
-            time_update_simplex_tree += ((double)(end_time-start_time)/CLOCKS_PER_SEC);
-    		//cout << "time of building a simplex tree "<<(double)(end_time-start_time)/CLOCKS_PER_SEC <<"s"<<endl;
 
-  			
-            zero_rank(rank_inv_tmp,x_range+1,y_range+1);
-
+            //////////////////compute persistence
             start_time=clock();
-  			int coeff_field_characteristic=11;
-  			int min_persistence=0;
+  			int coeff_field_characteristic = 11;
+  			int min_persistence = 0;
   			Persistent_cohomology pcoh(st);
   			pcoh.init_coefficients(coeff_field_characteristic);
   			pcoh.compute_persistent_cohomology(min_persistence);
             auto persistent_pairs = pcoh.intervals_in_dimension(rank_dim);
-
             end_time=clock();
             time_barcodes+=(double)(end_time-start_time)/CLOCKS_PER_SEC ;
             //cout <<"time of calculating barcodes "<<(double)(end_time-start_time)/CLOCKS_PER_SEC <<"s"<<endl;
- 
-            
+            //////////////////
+
+
+            ///////////////////compute rank invariant
+            zero_rank(rank_inv_tmp,x_range+1,y_range+1);
             start_time=clock();
             for (auto pair : persistent_pairs) {                
                 int barcode_sid = pair.first;
@@ -452,6 +445,7 @@ int main(int argc, char* const argv[]) {
     				}
     			}
     		}
+            ///////////////////
 
     		end_time=clock();
             time_rank_inv += (double)(end_time-start_time)/CLOCKS_PER_SEC;
@@ -485,7 +479,7 @@ int main(int argc, char* const argv[]) {
         }
     }*/
 
-    //print barcodes
+    // Write barcodes in file
     cout<<"with st.initialize_filtration()"<<endl;
     cout << "Barcode size: " << b.size() << std::endl;
 
@@ -494,23 +488,19 @@ int main(int argc, char* const argv[]) {
     std::ofstream f(out_file);
 
     f << x_range << " "<< y_range<<endl;
-
-
     for(it=b.begin(); it != b.end(); it++)
     {
         f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  endl;
         //cout<<"m[("<<(it->first).first.first<<","<<(it->first).first.second <<"),("<<(it->first).second.first<<","<<(it->first).second.second<<")]="<<it->second<<endl;
     }
 
-
-
+    // Output the running time for each part 
     cout <<"time of updating a simplex tree per path is "<< time_update_simplex_tree/((x_range+1)*(y_range+1)) <<"s"<<endl;
     cout <<"time of calculating barcodes per path is "<< time_barcodes/((x_range+1)*(y_range+1)) <<"s"<<endl;
     cout <<"time of calculating rank invariance is "<< time_rank_inv/((x_range+1)*(y_range+1)) <<"s"<<endl;
     cout <<"time of calculating the signed barcode decomposition is "<< time_multiplicity <<"s"<<endl;
     cout << "total time is "<<time_total<<"s"<<endl;
     cout << "average running time per path is "<<time_total/((x_range+1)*(y_range+1)) <<"s"<<endl;
-
     cout << "output barcodes file: "<< out_file<<endl;
 
 }
