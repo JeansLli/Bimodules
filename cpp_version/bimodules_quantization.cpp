@@ -103,7 +103,7 @@ entry proj_grid_to_path(entry simplex_node, entry elbow, int x_range,int y_range
 
 
 int multp (rank& r, int i, int j, int k, int l) {
-// m(s,t+) = r(s,t) − r((s.x −1,s.y),t) − r((s.x,s.y −1),t) + r((s.x −1,s.y −1),t)
+//The formula is m(s,t+) = r(s,t) − r((s.x −1,s.y),t) − r((s.x,s.y −1),t) + r((s.x −1,s.y −1),t)
     
     // check boundaries 
     if(i<0 || j<0 || k>=r.size() || l>=r[0].size())
@@ -123,7 +123,7 @@ int multp (rank& r, int i, int j, int k, int l) {
 
 
 void compute_R_S_incl_excl(rank& r, barcode& b) {
-// m(s,t) = m(s,t+) − m(s,(t.x +1,t.y)+) − m(s,(t.x,t.y +1)+) + m(s,(t.x +1,t.y +1)+)
+// The formula is m(s,t) = m(s,t+) − m(s,(t.x +1,t.y)+) − m(s,(t.x,t.y +1)+) + m(s,(t.x +1,t.y +1)+)
     
     for (int i = 0; i<r.size(); i++){
         for (int j = 0; j<r[0].size(); j++){
