@@ -11,9 +11,9 @@ def visualize_barcodes(m):
 
     fig, ax = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
     for x in range(x_range+1):
-        ax.axvline(x, lw=1, color='k', zorder=5) # Horizontal
+        ax.axvline(x, lw=1, color='k', zorder=5, linestyle=":",) # Horizontal
     for y in range(y_range+1):
-        ax.axhline(y, lw=1, color='k', zorder=5) # Ordinate
+        ax.axhline(y, lw=1, color='k', zorder=5, linestyle=":",) # Ordinate
 
     for i in range(m.shape[0]):
         for j in range(m.shape[1]):
@@ -41,6 +41,7 @@ def visualize_barcodes(m):
                             ax.plot([i, k], [j, l], 'rv', linestyle="-")
 
     #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    #plt.axis('off')
     plt.show()
     #ax.axis('off')
 
@@ -72,6 +73,7 @@ def visualize_barcodes_lines_intensity(m):
                         ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value)
 
     #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    #plt.axis('off')
     plt.show()
     #ax.axis('off')
 
@@ -82,11 +84,11 @@ def visualize_barcodes_points_intensity(m):
     data = np.ones((x_range,y_range)) * np.nan
 
     fig, ax = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
-    for x in range(-x_range-2,x_range+2):
+    for x in range(-x_range-1,x_range+2):
         ax.axvline(x, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) # Horizontal
     ax.axvline(0, lw=1, color='k', zorder=5,linestyle="-") # Horizontal
 
-    for y in range(-y_range-2,y_range+2):
+    for y in range(-y_range-1,y_range+2):
         ax.axhline(y, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) #) # Ordinate
     ax.axhline(0, lw=1, color='k', zorder=5,linestyle="-") # Horizontal
 
@@ -104,6 +106,7 @@ def visualize_barcodes_points_intensity(m):
                         ax.plot([i-k], [j-l], 'ro', linestyle="-",alpha=min_value)
 
     #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    #plt.axis('off')
     plt.show()
     #ax.axis('off')
 
@@ -135,6 +138,7 @@ while(line!=''):
 
 f.close()
 
+visualize_barcodes(m)
 visualize_barcodes_lines_intensity(m)
 visualize_barcodes_points_intensity(m)
 

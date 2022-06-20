@@ -466,7 +466,7 @@ int main(int argc, char* const argv[]) {
     time_multiplicity += (double)(end_time-start_time)/CLOCKS_PER_SEC;
     time_total = (double)(end_total_time-start_total_time)/CLOCKS_PER_SEC;
     
-    /*
+    
     //print the rank invariance
     for(int i=0;i<=x_range;++i){
         for(int j=0;j<=y_range;++j){
@@ -477,7 +477,7 @@ int main(int argc, char* const argv[]) {
 
             }
         }
-    }*/
+    }
 
     // Write barcodes in file
     cout<<"with st.initialize_filtration()"<<endl;
