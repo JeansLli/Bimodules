@@ -18,6 +18,7 @@ After running the code, we can visualize the result using
 python visualize_barcodes.py --input  ./result/dim_0_barcodes_1025.txt
 
 If you want to visualize the result dynamically, you can try
+
 python visualize_barcodes_mouse_move.py --input ./result/dim_0_barcodes_121575.txtt
  
 
