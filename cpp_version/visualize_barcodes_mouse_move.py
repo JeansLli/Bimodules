@@ -87,7 +87,6 @@ for i in range(m.shape[0]):
 
 
 
-#https://www.csdn.net/tags/MtTaIgysMzczMjAxLWJsb2cO0O0O.html
 def on_move(event):
     xdata = event.xdata
     ydata = event.ydata
@@ -95,31 +94,20 @@ def on_move(event):
         return
     for points, annotation in po_annotation:
         [i,j,k,l,m_value] = points
-        print("xdata=",xdata)
-        print("ydata=",ydata)
-        print("i,j,k,l,m_value",i,j,k,l,m_value)
         vec1 = [xdata-i,ydata-j]
         vec2 = [k-i,l-j]
-        print("vec1=",vec1)
-        print("vec2=",vec2)
         vec1 = vec1/np.linalg.norm(vec1)
         vec2 = vec2/np.linalg.norm(vec2)
-        print("vec1=",vec1)
-        print("vec2=",vec2)
 
         ang = np.arccos(np.dot(vec1,vec2))
         ang = ang*180/math.pi
-        print("ang=",ang)
-
+        
         if xdata>=i and xdata<=k and ydata>=j and ydata<=l and ang<1:
-            print("yes!!!!")
             annotation.set_visible(True)
         else:
             annotation.set_visible(False)
 
-
     plt.draw()
-
 
 
 on_move_id = fig.canvas.mpl_connect('motion_notify_event', on_move)
