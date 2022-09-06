@@ -8,7 +8,7 @@ First enter the folder using
 
 cd cpp_version
 
-the command is like  ./bimodules_quantization x y rank_dim input_file  
+Then the command is like  ./bimodules_quantization x y rank_dim input_file  
 (x,y) is the grid size, rank_dim is the homology degree.
 
 For example: ./bimodules_quantization 20 20 1 ../../data/function_rips_with_threshold_1000_1.scc
