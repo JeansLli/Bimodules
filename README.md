@@ -4,6 +4,10 @@ There are 2 different versions for bimodule decomposition. The first one is one-
 
 
 For cpp version code:  
+First enter the folder using 
+
+cd cpp_version
+
 the command is like  ./bimodules_quantization x y rank_dim input_file  
 (x,y) is the grid size, rank_dim is the homology degree.
 
@@ -13,5 +17,8 @@ After running the code, we can visualize the result using
 
 python visualize_barcodes.py --input  ./result/dim_0_barcodes_1025.txt
 
+If you want to visualize the result dynamically, you can try
+python visualize_barcodes_mouse_move.py --input ./result/dim_0_barcodes_121575.txtt
+ 
 
 rips_filtration_from_GMM.py is to create the input data.

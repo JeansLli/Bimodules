@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 import argparse
+import pdb
 
 def visualize_barcodes(m):
     x_range = m.shape[0]-1
@@ -111,6 +112,56 @@ def visualize_barcodes_points_intensity(m):
     #ax.axis('off')
 
 
+def visualize_barcodes_lines_width(m):
+    x_range = m.shape[0]-1
+    y_range = m.shape[1]-1
+    m_max = -100000000
+    m_min = 100000000
+    for i in range(m.shape[0]):
+        for j in range(m.shape[1]):
+            for k in range(i,m.shape[0]):
+                for l in range(j,m.shape[1]):
+                    if(i!=k and j!=l and m[i,j,k,l]<m_min):
+                        m_min = m[i,j,k,l]
+                    if(i!=k and j!=l and m[i,j,k,l]>m_max):
+                        m_max = m[i,j,k,l]
+
+    print("m_max=",m_max)
+    print("m_min=",m_min)
+
+    data = np.ones((x_range,y_range)) * np.nan
+
+    fig, ax = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
+    for x in range(x_range+2):
+        ax.axvline(x, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) # Horizontal
+
+    for y in range(y_range+2):
+        ax.axhline(y, lw=1, color='k', zorder=5,linestyle=":",alpha=0.3) #) # Ordinate
+
+    for i in range(m.shape[0]):
+        for j in range(m.shape[1]):
+            for k in range(i,m.shape[0]):
+                for l in range(j,m.shape[1]):
+                    if(m[i,j,k,l]):
+                        print("m(({0},{1}),({2},{3}))={4}".format(i,j,k,l,int(m[i,j,k,l])))
+                    if(m[i,j,k,l]>0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        wid_value = m[i,j,k,l] / m_max
+                        ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        print("text position ",(i+k)/2, (j+l)/2)
+                        plt.text((i+k)/2,(j+l)/2,str(m[i,j,k,l]))
+                    if(m[i,j,k,l]<0 and i!=k and j!=l):
+                        min_value = min(k-i,l-j)/min(x_range,y_range)
+                        wid_value = m[i,j,k,l] / m_min
+                        ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+
+    #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
+    #plt.axis('off')
+    plt.show()
+    #ax.axis('off')
+
+
+
 parser = argparse.ArgumentParser(description='test')
 parser.add_argument('--input', type=str, help='input barcodes file')
 
@@ -138,9 +189,11 @@ while(line!=''):
 
 f.close()
 
-visualize_barcodes(m)
-visualize_barcodes_lines_intensity(m)
-visualize_barcodes_points_intensity(m)
+#visualize_barcodes(m)
+#visualize_barcodes_lines_intensity(m)
+#visualize_barcodes_points_intensity(m)
+
+visualize_barcodes_lines_width(m)
 
 
 
