@@ -228,7 +228,7 @@ def visualize_barcodes_grey(m,barcodes):
 
     grey_mim = greys.min()
     grey_max = greys.max()
-    print("grey_max=",grey_max)
+    
     for i in range(x_range):
         for j in range(y_range):
             ######## for x-y switch
@@ -347,6 +347,11 @@ def visualize_barcodes_segment(m,barcodes):
     def line_x(y,angle,offset):
         return (y-offset)/(math.tan(angle/180*math.pi))
 
+
+
+
+
+
     # define the function
     def segment(x, angle, offset):
         y = math.tan(angle/180*math.pi)*x+offset
@@ -385,6 +390,70 @@ def visualize_barcodes_segment(m,barcodes):
     #    print("bar_d=",bar_d)
     #    return bar_d
     ####################
+    def bars_b(angle, offset): 
+        bars_bb=[]
+        lines_pos = []
+        lines_neg = []
+        print("angle=",angle)
+        print("k=",math.tan(angle/180*math.pi))
+        print("offset=",offset)
+        for b in barcodes:
+            if b[0] <= line_y(b[1],angle,offset):
+                line_start = [b[1],line_y(b[1],angle,offset)]
+                if b[2] <= line_y(b[3],angle,offset):
+                    line_end = [line_x(b[2],angle,offset),b[2]]
+                else:
+                    line_end = [b[3],line_y(b[3],angle,offset)]
+
+                if line_end[1]>=line_start[1] and line_end[0]>=line_start[0]:
+                    if b[4]>0:
+                        lines_pos.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
+                    else:
+                        lines_neg.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
+
+        for line_p in lines_pos:
+            for line_n in lines_neg:
+
+                if line_p[:4]== line_n[:4] and line_p[4]+line_n[4]<=0:
+                    lines_pos.remove(line_p)
+                    break
+
+        for line_p in lines_pos:
+            bars_bb.append(line_p[0])
+        
+        return bars_bb
+
+    def bars_d(x,angle, offset): 
+        if x==[]:
+            return []
+        bars_dd=[]
+        lines_pos = []
+        lines_neg = []
+        for b in barcodes:
+            if b[0] <= line_y(b[1],angle,offset):
+                line_start = [b[1],line_y(b[1],angle,offset)]
+                if b[2] <= line_y(b[3],angle,offset):
+                    line_end = [line_x(b[2],angle,offset),b[2]]
+                else:
+                    line_end = [b[3],line_y(b[3],angle,offset)]
+                if line_end[1]>=line_start[1] and line_end[0]>=line_start[0]:
+                    if b[4]>0:
+                        lines_pos.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
+                    else:
+                        lines_neg.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
+
+        for line_p in lines_pos:
+            for line_n in lines_neg:
+                if line_p[:4]== line_n[:4] and (line_p[4]+line_n[4])<=0:
+                    lines_pos.remove(line_p)
+                    break
+
+        for line_p in lines_pos:
+            bars_dd.append(line_p[2])
+
+        return bars_dd
+
+
 
 
     angle=np.linspace(0, 90)
@@ -393,7 +462,7 @@ def visualize_barcodes_segment(m,barcodes):
     controls = iplt.plot(x, segment, angle=angle, offset=offset,ax=ax,color="yellow")
     fig2, ax2 = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
     ax2.plot([0, 20],[0, 20], linestyle="-")
-    #_ = iplt.scatter(bars_b, bars_d, controls=controls,ax=ax2)
+    _ = iplt.scatter(bars_b, bars_d, controls=controls,ax=ax2)
     
 
     #ax.imshow(data, interpolation='none', extent=[-1,x_range+1, -1, y_range+1], zorder=0)
