@@ -29,4 +29,4 @@ If you want to visualize the result dynamically, you can try
 python visualize_barcodes_mouse_move.py --input ./result/dim_0_barcodes_121575.txtt
 ```
 
-rips_filtration_from_GMM.py is to create the input data.
+`rips_filtration_from_GMM.py` is to create the input data.
