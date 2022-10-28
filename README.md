@@ -9,7 +9,10 @@ First enter the folder using
 cd cpp_version
 ```
 
-Then the command is like:  ./bimodules_quantization x y rank_dim input_file  
+Then the command is like:  
+```
+./bimodules_quantization x y rank_dim input_file  
+```
 (x,y) is the grid size, rank_dim is the homology degree.
 
 For example: 
