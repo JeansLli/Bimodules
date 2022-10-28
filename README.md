@@ -5,8 +5,9 @@ There are 2 different versions for bimodule decomposition. The first one is one-
 
 ## For cpp version code:  
 First enter the folder using 
-
+```
 cd cpp_version
+```
 
 Then the command is like:  ./bimodules_quantization x y rank_dim input_file  
 (x,y) is the grid size, rank_dim is the homology degree.
