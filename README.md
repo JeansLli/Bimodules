@@ -13,7 +13,7 @@ Then the command is like:
 ```
 ./bimodules_quantization x y rank_dim input_file  
 ```
-(x,y) is the grid size, rank_dim is the homology degree.
+`(x,y)` is the grid size, `rank_dim` is the homology degree.
 
 For example: 
 ```
