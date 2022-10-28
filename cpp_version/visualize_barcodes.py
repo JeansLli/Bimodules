@@ -364,32 +364,6 @@ def visualize_barcodes_segment(m,barcodes):
     x = np.linspace(0, x_range, 10000)
 
 
-    ######### project 2D to 1D. No, it's wrong now.
-    #def bars_b(angle, offset): 
-    #    bar_b=[]
-    #    for b in barcodes:
-    #        if b[2]>line_y(b[1],angle,offset) and b[0]<line_y(b[3],angle,offset):
-    #            bar_b.append(b[1])
-    #    print("bar_b=",bar_b)
-    #    return bar_b
-    #
-    #def bars_d(x,angle, offset): 
-    #    bar_d=[]
-    #    for b in barcodes:
-    #        print("angle=",angle)
-    #        print("k=",math.tan(angle/180*math.pi))
-    #        print("offset=",offset)
-    #        print("barcode=",b)
-    #        if b[2]>line_y(b[1],angle,offset) and b[0]<line_y(b[3],angle,offset):
-    #            if(angle==0): 
-    #                bar_d.append(b[3])
-    #                print("1death=",b[3])
-    #            else:
-    #                bar_d.append(line_x(b[2],angle,offset))
-    #                print("2death=",line_x(b[2],angle,offset))
-    #    print("bar_d=",bar_d)
-    #    return bar_d
-    ####################
     def bars_b(angle, offset): 
         bars_bb=[]
         lines_pos = []
@@ -455,7 +429,7 @@ def visualize_barcodes_segment(m,barcodes):
 
 
 
-
+    ### Set the range of angle and offset
     angle=np.linspace(0, 90)
     offset=np.linspace(-20, 20)
 
