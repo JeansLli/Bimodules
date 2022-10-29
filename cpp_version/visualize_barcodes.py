@@ -421,9 +421,7 @@ def visualize_barcodes_segment(m,barcodes):
 
 
         for line_p in lines_pos:
-            print("line_p=",line_p)
             for line_n in lines_neg:
-                print("line_n=",line_n)
                 if compare_two_segments(line_p[:4],line_n[:4])==True and (line_p[4]+line_n[4])<=0:
                     lines_pos.remove(line_p)
                     break
@@ -441,7 +439,7 @@ def visualize_barcodes_segment(m,barcodes):
 
     controls = iplt.plot(x, segment, angle=angle, offset=offset,ax=ax,color="yellow")
     fig2, ax2 = plt.subplots(1, 1, figsize=(5,5),tight_layout=True)
-    ax2.plot([0, 20],[0, 20], linestyle="-")
+    ax2.plot([0, x_range],[0, x_range], linestyle="-")
     _ = iplt.scatter(bars_b, bars_d, controls=controls,ax=ax2)
     
 
