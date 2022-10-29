@@ -201,8 +201,8 @@ def visualize_barcodes_grey(m,barcodes):
                         wid_value = m[i,j,k,l] / m_max
 
                         ########## for x-y switch
-                        #ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
-                        ax.plot([j, l],[i, k], 'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        #ax.plot([j, l],[i, k], 'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
                         ##########
 
                     if(m[i,j,k,l]<0 and i!=k and j!=l):
@@ -210,8 +210,8 @@ def visualize_barcodes_grey(m,barcodes):
                         wid_value = m[i,j,k,l] / m_min
 
                         ########## for x-y switch
-                        #ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
-                        ax.plot([j, l],[i, k], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        #ax.plot([j, l],[i, k], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
                         ##########
 
 
@@ -232,11 +232,11 @@ def visualize_barcodes_grey(m,barcodes):
     for i in range(x_range):
         for j in range(y_range):
             ######## for x-y switch
-            #rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[i][j]/grey_max))
-            rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[j][i]/grey_max))
+            rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[i][j]/grey_max))
+            #rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[j][i]/grey_max))
             ########
             ax.add_patch(rect)
-            plt.text(i+1/2,j+1/2,greys[j][i])
+            #plt.text(i+1/2,j+1/2,greys[j][i])
 
 
     # define the function
@@ -261,6 +261,13 @@ def visualize_barcodes_grey(m,barcodes):
     #plt.axis('off')
     plt.show()
     #ax.axis('off')
+
+def compare_two_segments(line_p,line_n):
+    print("exp(-8)=",math.exp(-8))
+    for i in range(4):
+        if line_p[i]<line_n[i]-math.exp(-8) or line_p[i]>line_n[i]+math.exp(-8):
+            return False
+    return True
 
 
 def visualize_barcodes_segment(m,barcodes):
@@ -301,8 +308,8 @@ def visualize_barcodes_segment(m,barcodes):
                         wid_value = m[i,j,k,l] / m_max
 
                         ########## for x-y switch
-                        #ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
-                        ax.plot([j, l],[i, k], 'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        ax.plot([i, k], [j, l],'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        #ax.plot([j, l],[i, k], 'bv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
                         ##########
 
                     if(m[i,j,k,l]<0 and i!=k and j!=l):
@@ -310,8 +317,8 @@ def visualize_barcodes_segment(m,barcodes):
                         wid_value = m[i,j,k,l] / m_min
 
                         ########## for x-y switch
-                        #ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
-                        ax.plot([j, l],[i, k], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        ax.plot([i, k], [j, l], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
+                        #ax.plot([j, l],[i, k], 'rv', linestyle="-",alpha=min_value,linewidth=m[i,j,k,l])
                         ##########
 
 
@@ -334,11 +341,11 @@ def visualize_barcodes_segment(m,barcodes):
     for i in range(x_range):
         for j in range(y_range):
             ######## for x-y switch
-            #rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[i][j]/grey_max))
-            rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[j][i]/grey_max))
+            rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[i][j]/grey_max))
+            #rect = pch.Rectangle(xy=(i,j),width=1, height=1, color=str(1-greys[j][i]/grey_max))
             ########
             ax.add_patch(rect)
-            plt.text(i+1/2,j+1/2,int(greys[j][i]))
+            #plt.text(i+1/2,j+1/2,int(greys[j][i]))
     
 
     def line_y(x,angle, offset):
@@ -348,17 +355,12 @@ def visualize_barcodes_segment(m,barcodes):
         return (y-offset)/(math.tan(angle/180*math.pi))
 
 
-
-
-
-
     # define the function
     def segment(x, angle, offset):
         y = math.tan(angle/180*math.pi)*x+offset
         y[y<=0] = 0
         y[y>=y_range] = y_range
         return y
-
 
 
     x = np.linspace(0, x_range, 10000)
@@ -372,14 +374,14 @@ def visualize_barcodes_segment(m,barcodes):
         print("k=",math.tan(angle/180*math.pi))
         print("offset=",offset)
         for b in barcodes:
-            if b[0] <= line_y(b[1],angle,offset):
-                line_start = [b[1],line_y(b[1],angle,offset)]
-                if b[2] <= line_y(b[3],angle,offset):
-                    line_end = [line_x(b[2],angle,offset),b[2]]
+            if b[1] <= line_y(b[0],angle,offset):
+                line_start = [b[0],line_y(b[0],angle,offset)]
+                if b[3] <= line_y(b[2],angle,offset):
+                    line_end = [line_x(b[3],angle,offset),b[3]]
                 else:
-                    line_end = [b[3],line_y(b[3],angle,offset)]
+                    line_end = [b[2],line_y(b[2],angle,offset)]
 
-                if line_end[1]>=line_start[1] and line_end[0]>=line_start[0]:
+                if line_end[0]>=line_start[0] and line_end[1]>=line_start[1]:
                     if b[4]>0:
                         lines_pos.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
                     else:
@@ -388,7 +390,7 @@ def visualize_barcodes_segment(m,barcodes):
         for line_p in lines_pos:
             for line_n in lines_neg:
 
-                if line_p[:4]== line_n[:4] and line_p[4]+line_n[4]<=0:
+                if compare_two_segments(line_p[:4],line_n[:4])==True and (line_p[4]+line_n[4])<=0:
                     lines_pos.remove(line_p)
                     break
 
@@ -404,21 +406,25 @@ def visualize_barcodes_segment(m,barcodes):
         lines_pos = []
         lines_neg = []
         for b in barcodes:
-            if b[0] <= line_y(b[1],angle,offset):
-                line_start = [b[1],line_y(b[1],angle,offset)]
-                if b[2] <= line_y(b[3],angle,offset):
-                    line_end = [line_x(b[2],angle,offset),b[2]]
+            if b[1] <= line_y(b[0],angle,offset):
+                line_start = [b[0],line_y(b[0],angle,offset)]
+                if b[3] <= line_y(b[2],angle,offset):
+                    line_end = [line_x(b[3],angle,offset),b[3]]
                 else:
-                    line_end = [b[3],line_y(b[3],angle,offset)]
-                if line_end[1]>=line_start[1] and line_end[0]>=line_start[0]:
+                    line_end = [b[2],line_y(b[2],angle,offset)]
+
+                if line_end[0]>=line_start[0] and line_end[1]>=line_start[1]:
                     if b[4]>0:
                         lines_pos.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
                     else:
                         lines_neg.append([line_start[0],line_start[1],line_end[0],line_end[1],b[4]])
 
+
         for line_p in lines_pos:
+            print("line_p=",line_p)
             for line_n in lines_neg:
-                if line_p[:4]== line_n[:4] and (line_p[4]+line_n[4])<=0:
+                print("line_n=",line_n)
+                if compare_two_segments(line_p[:4],line_n[:4])==True and (line_p[4]+line_n[4])<=0:
                     lines_pos.remove(line_p)
                     break
 
@@ -474,7 +480,8 @@ while(line!=''):
 
 f.close()
 
-#visualize_barcodes(m)
+
+#visualize_barcodes(m) #The very basic version of visualization
 #visualize_barcodes_lines_intensity(m)
 #visualize_barcodes_points_intensity(m)
 #visualize_barcodes_lines_width(m)

@@ -473,7 +473,7 @@ int main(int argc, char* const argv[]) {
             for(int k=0;k<=x_range;++k){
                 for(int l=0;l<=y_range;++l)
                     if(rank_inv[i][j][k][l]!=0)
-                        cout<<"rank[("<<i<<","<<j<<"),("<<k<<","<<l<<")]="<<rank_inv[i][j][k][l]<<endl;
+                        cout<<"rank[("<<j<<","<<i<<"),("<<l<<","<<k<<")]="<<rank_inv[i][j][k][l]<<endl;
 
             }
         }
@@ -490,7 +490,7 @@ int main(int argc, char* const argv[]) {
     f << x_range << " "<< y_range<<endl;
     for(it=b.begin(); it != b.end(); it++)
     {
-        f << (it->first).first.first  << " " << (it->first).first.second << " " <<  (it->first).second.first << " " << (it->first).second.second << " " <<   it->second <<  endl;
+        f << (it->first).first.second  << " " << (it->first).first.first << " " <<  (it->first).second.second << " " << (it->first).second.first << " " <<   it->second <<  endl;
         //cout<<"m[("<<(it->first).first.first<<","<<(it->first).first.second <<"),("<<(it->first).second.first<<","<<(it->first).second.second<<")]="<<it->second<<endl;
     }
 
