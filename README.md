@@ -21,7 +21,7 @@ First enter the folder using
 ```
 cd cpp_version
 ```
-Then compile it:
+Then compile it and generate an executable file `bimodules_quantization`:
 ```
 mkdir build
 cmake ..
