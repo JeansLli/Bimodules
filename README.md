@@ -24,6 +24,7 @@ cd cpp_version
 Then compile it and generate an executable file `bimodules_quantization`:
 ```
 mkdir build
+cd build
 cmake ..
 make
 ```
