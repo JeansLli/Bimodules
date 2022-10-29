@@ -3,9 +3,9 @@
 There are 2 different versions for bimodule decomposition. The first one is one-to-one version and the other one is quantization version. One-to-one version is implemented by python, and quantization version is implemented by both python and C++.
 
 ## Python environment
-First, install [anaconda](https://docs.anaconda.com/anaconda/user-guide/getting-started/) and create virtual environments for this code. 
+First, install [anaconda](https://docs.anaconda.com/anaconda/user-guide/getting-started/) and create virtual environments. 
 
-## Create data and scc2020 format
+## Create data of scc2020 format
 To create data, let's run
 ```
 cd data
@@ -17,7 +17,7 @@ For more details about scc2020 format, please read `format_scc2020.pdf` in this 
 
 
 ## For cpp version code:  
-First enter the folder using 
+First enter the folder:
 ```
 cd cpp_version
 ```
@@ -45,7 +45,7 @@ python visualize_barcodes.py --input  ./result/dim_0_barcodes_1025.txt
 ```
 In the file `visualize_barcodes.py`, different modes of visualization could be set.
 
-You can also try to visualize the result dynamically:
+You may also want to try the dynamic visualization:
 ```
 python visualize_barcodes_mouse_move.py --input ./result/dim_0_barcodes_121575.txtt
 ```
