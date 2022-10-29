@@ -28,7 +28,7 @@ cmake ..
 make
 ```
 
-Then the command is like:  
+Then the run the executable file and the command is like:  
 ```
 ./bimodules_quantization x y rank_dim input_file  
 ```
