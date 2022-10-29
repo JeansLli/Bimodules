@@ -1,4 +1,4 @@
-# It's for "On rectangle-decomposable 2-parameter persistence modules"
+# The code is for rank decomposition and signed barcode.
 
 There are 2 different versions for bimodule decomposition. The first one is one-to-one version and the other one is quantization version. One-to-one version is implemented by python, and quantization version is implemented by both python and C++.
 
@@ -36,16 +36,16 @@ Then the run the executable file and the command is like:
 
 For example: 
 ```
-./bimodules_quantization 20 20 1 ../../data/function_rips_with_threshold_1000_1.scc
+./bimodules_quantization 20 20 1 ../../data/function_rips_GMM.txt
 ```
 
 After running the code, we can visualize the result using
 ```
 python visualize_barcodes.py --input  ./result/dim_0_barcodes_1025.txt
 ```
-In the file `visualize_barcodes.py`, you can set different modes of visualization.
+In the file `visualize_barcodes.py`, different modes of visualization could be set.
 
-If you want to visualize the result dynamically, you can try
+You can also try to visualize the result dynamically:
 ```
 python visualize_barcodes_mouse_move.py --input ./result/dim_0_barcodes_121575.txtt
 ```
