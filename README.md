@@ -13,7 +13,7 @@ python rips_filtration_from_GMM.py
 ```
 Some of the code in this folder is from [https://bitbucket.org/mkerber/cgta_paper_2021/src/master/](https://bitbucket.org/mkerber/cgta_paper_2021/src/master/).
 
-For more details about scc2020 format, please read `format_scc2020.pdf` in this folder.
+For more details about scc2020 format, please see the website [https://bitbucket.org/mkerber/chain_complex_format/src](https://bitbucket.org/mkerber/chain_complex_format/src).
 
 
 ## For cpp version code:  
