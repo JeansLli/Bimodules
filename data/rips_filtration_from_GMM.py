@@ -23,7 +23,7 @@ argc=len(argv)
 if(argc>=2):
     no_points=int(argv[1])
 else:
-    no_points=90
+    no_points=100
 
 if(argc>=3):
     no_simplices=int(argv[2])
@@ -41,9 +41,16 @@ print('output filename:' + file_name)
 
 
 start = time.time()
-
-pointcloud, y_true = make_blobs(n_samples=no_points, centers=[[0.4,0.4],[0.4,0.8],[0.8,0.5]],
+# centers=[[0.4,0.4],[0.4,0.8],[0.8,0.5],[0.8,0.8]]
+pointcloud, y_true = make_blobs(n_samples=no_points, centers=[[0.4,0.4],[0.4,0.8],[0.8,0.5],[0.8,0.8]],
                                 cluster_std=0.04, n_features=2, random_state=4)
+
+
+
+pointFile = open(file_name[:-4]+"_points.txt", 'w')
+np.savetxt(pointFile,pointcloud)
+pointFile.close()
+
 plt.scatter(pointcloud[:, 0], pointcloud[:, 1])
 plt.show()
 
@@ -53,7 +60,8 @@ print('Sampling: ' + str(runtime))
 
 band = 0.2
 
-kde = KernelDensity(kernel='linear', bandwidth=band).fit(pointcloud)
+#kde = KernelDensity(kernel='linear', bandwidth=band).fit(pointcloud)
+kde = KernelDensity(kernel='gaussian', bandwidth=band).fit(pointcloud)
 function_vals = np.exp(kde.score_samples(pointcloud))
 
 end = time.time()

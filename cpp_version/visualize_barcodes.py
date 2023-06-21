@@ -455,7 +455,7 @@ parser.add_argument('--input', type=str, help='input barcodes file')
 args = parser.parse_args()
 
 file_name = args.input
-print("file_name=",file_name)
+print("file_name=", )
 
 
 #file_name="./result/dim_0_barcodes_1025.txt"

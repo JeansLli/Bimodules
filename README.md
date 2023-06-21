@@ -39,13 +39,9 @@ For example:
 
 After running the code, we can visualize the result using
 ```
-python visualize_barcodes.py --input  ./result/dim_1_barcodes_200020.txt
+python visualize_barcodes_2023.py --input  ./result/dim_1_barcodes_200020.txt
 ```
-In the file `visualize_barcodes.py`, different modes of visualization could be set.
 
-You may also want to try the dynamic visualization:
-```
-python visualize_barcodes_mouse_move.py --input ./result/dim_1_barcodes_200020.txt
-```
+
 
 
