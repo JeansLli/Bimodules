@@ -1,3 +1,0 @@
-/Users/jingyili/Documents/ip-paris/research_TDA/Bimodules/cpp_version/build/CMakeFiles/bimodules_quantization.dir
-/Users/jingyili/Documents/ip-paris/research_TDA/Bimodules/cpp_version/build/CMakeFiles/edit_cache.dir
-/Users/jingyili/Documents/ip-paris/research_TDA/Bimodules/cpp_version/build/CMakeFiles/rebuild_cache.dir

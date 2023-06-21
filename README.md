@@ -21,23 +21,20 @@ First enter the folder:
 ```
 cd cpp_version
 ```
-Then compile it and generate an executable file `bimodules_quantization`:
+Then compile it and generate an executable file `rank_decomposition`:
 ```
-mkdir build
-cd build
-cmake ..
-make
+g++ -O3 -o rank_decomposition rank_decomposition.cpp -fopenmp
 ```
 
 Then the run the executable file and the command is like:  
 ```
-./bimodules_quantization x y rank_dim input_file  
+./rank_decomposition input_filename range_x range_y rank_dim output_filename
 ```
-`(x,y)` is the grid size, `rank_dim` is the homology degree.
+`(range_x,range_y)` is the grid size, `rank_dim` is the homology degree.
 
 For example: 
 ```
-./bimodules_quantization 20 20 1 ../../data/function_rips_GMM.txt
+./rank_decomposition ../data/function_rips_GMM.txt 20 20 1 ./result/function_rips_GMM_output.txt
 ```
 
 After running the code, we can visualize the result using
